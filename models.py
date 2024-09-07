@@ -1,68 +1,70 @@
-from sklearn.preprocessing import LabelEncoder
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from datetime import datetime
 
 # Train the model to predict task priority
 def train_model(df):
     # Convert the 'deadline' column to datetime format
     df['deadline'] = pd.to_datetime(df['deadline'], errors='coerce')
-    
+
     # Drop rows with NaT in 'deadline'
     df = df.dropna(subset=['deadline'])
-    
-    # Convert 'deadline' to numeric timestamps
-    df['deadline_numeric'] = df['deadline'].apply(lambda x: x.timestamp() if pd.notnull(x) else None)
-    
-    # Manual mapping of priority values (1 is the highest priority)
-    priority_mapping = {
-        'High': 1,
-        'Medium': 2,
-        'Low': 3
-    }
 
-    # Apply the mapping to the 'priority' column
-    df['priority_encoded'] = df['priority'].map(priority_mapping)
-    
+    # Calculate the time left in days from now to the deadline
+    now = datetime.now()
+    df['time_until_deadline'] = df['deadline'].apply(lambda x: (x - now).total_seconds() / 3600)  # Hours until deadline
+
     # Ensure 'estimated_time' is numeric
     df['estimated_time'] = pd.to_numeric(df['estimated_time'], errors='coerce')
 
-    # Check for missing values in 'priority_encoded'
-    if df['priority_encoded'].isnull().any():
-        print("Warning: Missing values found in 'priority_encoded'. Removing rows with missing priorities.")
-        df = df.dropna(subset=['priority_encoded'])  # Remove rows with NaN in 'priority_encoded'
+    # Drop rows with missing values in 'time_until_deadline' or 'estimated_time'
+    df = df.dropna(subset=['time_until_deadline', 'estimated_time'])
+
+    # Check if there is any data left
+    if df.empty:
+        raise ValueError("No data available for training after cleaning.")
 
     # Prepare features (X) and target (y)
-    X = df[['estimated_time', 'deadline_numeric']]  # Features must be numeric
-    y = df['priority_encoded']  # Encoded priority as the target
+    X = df[['estimated_time', 'time_until_deadline']]
+    y = df['priority_encoded']  # Assuming this column is already in the DataFrame
+
+    # Apply scaling to features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
     # Train the model
     model = LinearRegression()
     model.fit(X_train, y_train)
 
-    return model
-
+    return model, scaler
 
 
 # Function to predict task priority using both AI model and user input
-def predict_priority(task, user_priority, model):
-    # Convert the deadline to numeric format (timestamp)
-    task['deadline'] = pd.Timestamp(task['deadline']).timestamp()
+def predict_priority(task, user_priority, model, scaler):
+    # Convert the deadline to numeric format (hours until deadline)
+    now = datetime.now()
+    task['time_until_deadline'] = (pd.Timestamp(task['deadline']) - now).total_seconds() / 3600
 
     # Ensure estimated time is numeric
     task['estimated_time'] = pd.to_numeric(task['estimated_time'], errors='coerce')
 
     # Prepare features for prediction
-    task_features = [[task['estimated_time'], task['deadline']]]
+    task_features = [[task['estimated_time'], task['time_until_deadline']]]
+
+    # Scale the features
+    task_features_scaled = scaler.transform(task_features)
 
     # AI model predicts the priority (numeric)
-    ai_priority_encoded = model.predict(task_features)[0]
+    ai_priority_encoded = model.predict(task_features_scaled)[0]
 
     # Debug output
-    print("Task Features:", task_features)
+    print("Task Features (scaled):", task_features_scaled)
     print("AI Priority Encoded:", ai_priority_encoded)
     print("User Priority:", user_priority)
 
@@ -71,6 +73,4 @@ def predict_priority(task, user_priority, model):
 
     print("Final Priority:", final_priority)
 
-    # Map back to a priority label if needed
     return final_priority
-

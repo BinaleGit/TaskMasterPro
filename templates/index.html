@@ -39,15 +39,14 @@
             <tbody class="text-gray-700">
                 {% for task in tasks %}
                 <tr class="hover:bg-gray-50 transition duration-300 
-                {% if task['priority'] > 4 %}bg-red-100
-                {% elif task['priority'] > 3 %}bg-yellow-100
-                {% elif task['priority'] > 0 %}bg-green-100
-                {% else %}bg-white
-                {% endif %} border-b">
-
-                                <td class="py-3 px-6 font-medium">{{ task['task_name'] }}</td>
+                    {% if task['priority'] > 4 %}bg-red-100
+                    {% elif task['priority'] > 3 %}bg-yellow-100
+                    {% elif task['priority'] > 0 %}bg-green-100
+                    {% else %}bg-white
+                    {% endif %} border-b">
+                    <td class="py-3 px-6 font-medium">{{ task['task_name'] }}</td>
                     <td class="py-3 px-6">
-                        {{ task['priority'] | float | round(0) }}
+                        {{ task['priority'] | round(1) }}
                     </td>
                     <td class="py-3 px-6">{{ task['deadline'] }}</td>
                     <td class="py-3 px-6">{{ task['estimated_time'] }}</td>
@@ -58,9 +57,6 @@
                         {% if task['done?'] == False %}
                         <form action="{{ url_for('mark_done', task_name=task['task_name']) }}" method="POST" style="display:inline;">
                             <button class="bg-black text-white py-1 px-3 rounded hover:bg-gray-900 transition duration-300" type="submit">Done</button>
-                        </form>
-                        <form action="{{ url_for('mark_in_progress', task_name=task['task_name']) }}" method="POST" style="display:inline;">
-                            <button class="bg-black text-white py-1 px-3 rounded hover:bg-gray-900 transition duration-300" type="submit">In Progress</button>
                         </form>
                         {% else %}
                         <span class="text-gray-400 py-1 px-3 rounded">Done</span>

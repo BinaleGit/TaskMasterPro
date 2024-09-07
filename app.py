@@ -12,7 +12,7 @@ def load_tasks():
 
 # Train the model when the application starts
 df = load_tasks()
-model = train_model(df)
+model, scaler = train_model(df)
 
 # Function to calculate the time left until the deadline
 def calculate_time_left(deadline):
@@ -106,7 +106,7 @@ def add_task():
     }
 
     # Use the AI model to combine AI priority and user-provided priority
-    final_priority = predict_priority(task, priority, model)
+    final_priority = predict_priority(task, priority, model, scaler)
 
     # Manually map priority into encoded form
     priority_mapping = {
