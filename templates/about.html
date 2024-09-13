@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AI-powered To-do List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white">
+    <div class="w-full max-w-4xl">
+        <h1 class="text-4xl font-bold text-red-600 mb-6">About This App</h1>
+        <p class="mb-4 text-lg">
+            Welcome to the <strong>AI-powered To-do List</strong>, an intelligent task management app designed to help you prioritize and manage your tasks efficiently.
+        </p>
+        <p class="mb-4 text-lg">
+            This app uses machine learning algorithms to assign priorities to tasks based on deadlines and estimated completion times. It helps you focus on the most urgent and important tasks first by automatically sorting tasks into categories such as <strong>Past Due</strong>, <strong>Today</strong>, <strong>Tomorrow</strong>, and <strong>Upcoming</strong>.
+        </p>
+        <h2 class="text-3xl font-bold text-green-500 mb-4">Key Features</h2>
+        <ul class="list-disc list-inside text-lg mb-6">
+            <li>Smart priority prediction using AI.</li>
+            <li>Automatic grouping of tasks by deadlines.</li>
+            <li>User-friendly interface with color-coded task lists for better visual organization.</li>
+            <li>Easy addition and management of tasks.</li>
+        </ul>
+        <h2 class="text-3xl font-bold text-blue-500 mb-4">How It Works</h2>
+        <p class="mb-4 text-lg">
+            The app uses a machine learning model that takes into account the estimated time required for a task and the task's deadline. Based on these inputs and your custom priority, the app calculates a final priority and orders the tasks accordingly. 
+        </p>
+        <p class="mb-6 text-lg">
+            The app is constantly learning and can be retrained as more tasks are added, ensuring that the task prioritization improves over time.
+        </p>
+        <h2 class="text-3xl font-bold text-yellow-500 mb-4">Technologies Used</h2>
+        <ul class="list-disc list-inside text-lg mb-6">
+            <li>Flask for the backend web server.</li>
+            <li>Pandas and Scikit-learn for machine learning and data management.</li>
+            <li>Tailwind CSS for a modern and responsive user interface.</li>
+        </ul>
+        <p class="text-lg">
+            Created with <span class="text-red-600">&hearts;</span> by Roee.
+        </p>
+
+        <!-- Back to Home Button -->
+        <div class="mt-8">
+            <a href="{{ url_for('home') }}" class="bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+</html>

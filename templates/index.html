@@ -3,96 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI To-do List</title>
-    <!-- Tailwind CSS for styling -->
+    <title>AI-powered To-do List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4">
-    <h1 class="text-4xl font-bold text-gray-800 mb-8">AI-powered To-do List</h1>
+<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white">
+    <h1 class="text-4xl font-bold text-red-600 mb-8">Scheduled Tasks</h1>
 
-    <!-- Show/Hide Done Tasks Button -->
-    <div class="w-full max-w-4xl mb-4 text-right">
-        {% if show_done == 'true' %}
-        <a href="{{ url_for('hide_done_tasks') }}" class="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-900">
-            Hide Done Tasks
-        </a>
+    <!-- Past Due Tasks -->
+    <div class="w-full max-w-4xl mb-6">
+        <h2 class="text-2xl font-bold text-red-600 mb-2">Past Due</h2>
+        {% if past_due_tasks %}
+        <ul>
+            {% for task in past_due_tasks %}
+            <li class="mb-4 bg-red-700 p-4 rounded-lg flex justify-between">
+                <div>
+                    <!-- Display the task name with the estimated time in hours -->
+                    <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
+                    <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
+                </div>
+                <span class="text-red-500 font-bold">Priority: {{ task['priority'] | round(1) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
         {% else %}
-        <a href="{{ url_for('show_done_tasks') }}" class="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-900">
-            Show Done Tasks
-        </a>
+        <p class="text-gray-500">No past due tasks.</p>
         {% endif %}
     </div>
 
-    <!-- Task Table -->
-    <div class="w-full max-w-4xl overflow-x-auto">
-        <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden border-collapse">
-            <thead class="bg-blue-600 text-white">
-                <tr>
-                    <th class="py-4 px-6 text-left">Task Name</th>
-                    <th class="py-4 px-6 text-left">Priority</th>
-                    <th class="py-4 px-6 text-left">Deadline</th>
-                    <th class="py-4 px-6 text-left">Estimated Time (hours)</th>
-                    <th class="py-4 px-6 text-left">Time Left</th>
-                    <th class="py-4 px-6 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                {% for task in tasks %}
-                <tr class="hover:bg-gray-50 transition duration-300 
-                    {% if task['priority'] > 4 %}bg-red-100
-                    {% elif task['priority'] > 3 %}bg-yellow-100
-                    {% elif task['priority'] > 0 %}bg-green-100
-                    {% else %}bg-white
-                    {% endif %} border-b">
-                    <td class="py-3 px-6 font-medium">{{ task['task_name'] }}</td>
-                    <td class="py-3 px-6">
-                        {{ task['priority'] | round(1) }}
-                    </td>
-                    <td class="py-3 px-6">{{ task['deadline'] }}</td>
-                    <td class="py-3 px-6">{{ task['estimated_time'] }}</td>
-                    <td class="py-3 px-6">
-                        {{ task['time_left'] }}
-                    </td>
-                    <td class="py-3 px-6">
-                        {% if task['done?'] == False %}
-                        <form action="{{ url_for('mark_done', task_name=task['task_name']) }}" method="POST" style="display:inline;">
-                            <button class="bg-black text-white py-1 px-3 rounded hover:bg-gray-900 transition duration-300" type="submit">Done</button>
-                        </form>
-                        {% else %}
-                        <span class="text-gray-400 py-1 px-3 rounded">Done</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <!-- Today's Tasks -->
+    <div class="w-full max-w-4xl mb-6">
+        <h2 class="text-2xl font-bold text-green-500 mb-2">Today</h2>
+        {% if today_tasks %}
+        <ul>
+            {% for task in today_tasks %}
+            <li class="mb-4 bg-green-700 p-4 rounded-lg flex justify-between">
+                <div>
+                    <!-- Display the task name with the estimated time in hours -->
+                    <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
+                    <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
+                </div>
+                <span class="text-green-500 font-bold">Priority: {{ task['priority'] | round(1) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500">No tasks due today.</p>
+        {% endif %}
+    </div>
+
+    <!-- Tomorrow's Tasks -->
+    <div class="w-full max-w-4xl mb-6">
+        <h2 class="text-2xl font-bold text-yellow-500 mb-2">Tomorrow</h2>
+        {% if tomorrow_tasks %}
+        <ul>
+            {% for task in tomorrow_tasks %}
+            <li class="mb-4 bg-yellow-700 p-4 rounded-lg flex justify-between">
+                <div>
+                    <!-- Display the task name with the estimated time in hours -->
+                    <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
+                    <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
+                </div>
+                <span class="text-yellow-500 font-bold">Priority: {{ task['priority'] | round(1) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500">No tasks due tomorrow.</p>
+        {% endif %}
+    </div>
+
+    <!-- Upcoming Tasks -->
+    <div class="w-full max-w-4xl mb-6">
+        <h2 class="text-2xl font-bold text-blue-500 mb-2">Upcoming</h2>
+        {% if upcoming_tasks %}
+        <ul>
+            {% for task in upcoming_tasks %}
+            <li class="mb-4 bg-blue-700 p-4 rounded-lg flex justify-between">
+                <div>
+                    <!-- Display the task name with the estimated time in hours -->
+                    <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
+                    <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
+                </div>
+                <span class="text-blue-500 font-bold">Priority: {{ task['priority'] | round(1) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500">No upcoming tasks.</p>
+        {% endif %}
     </div>
 
     <!-- Add Task Form -->
-    <div class="w-full max-w-4xl mt-8 bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Add a Task</h2>
+    <div class="w-full max-w-4xl mt-8 bg-gray-800 p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-white mb-4">Add a Task</h2>
         <form action="{{ url_for('add_task') }}" method="POST" class="space-y-4">
             <div>
-                <label for="task_name" class="block text-gray-700 font-medium">Task Name</label>
-                <input type="text" id="task_name" name="task_name" class="w-full p-3 border border-gray-300 rounded-lg">
+                <label for="task_name" class="block text-gray-300 font-medium">Task Name</label>
+                <input type="text" id="task_name" name="task_name" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white">
             </div>
             <div>
-                <label for="deadline" class="block text-gray-700 font-medium">Deadline (YYYY-MM-DD)</label>
-                <input type="date" id="deadline" name="deadline" class="w-full p-3 border border-gray-300 rounded-lg">
+                <label for="deadline" class="block text-gray-300 font-medium">Deadline (YYYY-MM-DD)</label>
+                <input type="date" id="deadline" name="deadline" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white">
             </div>
             <div>
-                <label for="time" class="block text-gray-700 font-medium">Time (HH:MM)</label>
-                <input type="time" id="time" name="time" class="w-full p-3 border border-gray-300 rounded-lg">
+                <label for="time" class="block text-gray-300 font-medium">Time (HH:MM)</label>
+                <input type="time" id="time" name="time" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white">
             </div>
             <div>
-                <label for="priority" class="block text-gray-700 font-medium">Priority (1-5)</label>
-                <input type="number" id="priority" name="priority" min="1" max="5" class="w-full p-3 border border-gray-300 rounded-lg">
+                <label for="priority" class="block text-gray-300 font-medium">Priority (1-5)</label>
+                <input type="number" id="priority" name="priority" min="1" max="5" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white">
             </div>
             <div>
-                <label for="estimated_time" class="block text-gray-700 font-medium">Estimated Time (hours)</label>
-                <input type="number" id="estimated_time" name="estimated_time" class="w-full p-3 border border-gray-300 rounded-lg">
+                <label for="estimated_time" class="block text-gray-300 font-medium">Estimated Time (hours)</label>
+                <input type="number" id="estimated_time" name="estimated_time" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white">
             </div>
-            <button type="submit" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Add Task</button>
+            <button type="submit" class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition duration-300">Add Task</button>
         </form>
     </div>
 </body>
