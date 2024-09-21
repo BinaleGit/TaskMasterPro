@@ -7,7 +7,20 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white">
-    <h1 class="text-4xl font-bold text-red-600 mb-8">Scheduled Tasks</h1>
+
+    <!-- Navigation bar -->
+    <nav class="w-full max-w-4xl flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-red-600">TaskMasterPro</h1>
+        <div>
+            {% if current_user.is_authenticated %}
+            <span class="mr-4">Hello, {{ current_user.username }}!</span>
+            <a href="{{ url_for('logout') }}" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300">Login</a>
+            <a href="{{ url_for('register') }}" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Register</a>
+            {% endif %}
+        </div>
+    </nav>
 
     <!-- Past Due Tasks -->
     <div class="w-full max-w-4xl mb-6">
@@ -17,7 +30,6 @@
             {% for task in past_due_tasks %}
             <li class="mb-4 bg-red-700 p-4 rounded-lg flex justify-between">
                 <div>
-                    <!-- Display the task name with the estimated time in hours -->
                     <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
                     <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
                 </div>
@@ -38,7 +50,6 @@
             {% for task in today_tasks %}
             <li class="mb-4 bg-green-700 p-4 rounded-lg flex justify-between">
                 <div>
-                    <!-- Display the task name with the estimated time in hours -->
                     <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
                     <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
                 </div>
@@ -59,7 +70,6 @@
             {% for task in tomorrow_tasks %}
             <li class="mb-4 bg-yellow-700 p-4 rounded-lg flex justify-between">
                 <div>
-                    <!-- Display the task name with the estimated time in hours -->
                     <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
                     <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
                 </div>
@@ -80,7 +90,6 @@
             {% for task in upcoming_tasks %}
             <li class="mb-4 bg-blue-700 p-4 rounded-lg flex justify-between">
                 <div>
-                    <!-- Display the task name with the estimated time in hours -->
                     <strong class="text-lg">{{ task['task_name'] }} - {{ task['estimated_time'] }} hour{{ 's' if task['estimated_time'] > 1 else '' }}</strong>
                     <span class="block text-sm text-gray-400">Reminders — {{ task['deadline'] }}</span>
                 </div>

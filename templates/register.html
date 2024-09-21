@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-sm bg-gray-800 p-8 rounded-lg">
+        <h1 class="text-2xl text-white mb-6 text-center">Register</h1>
+        <form action="{{ url_for('register') }}" method="POST">
+            <div class="mb-4">
+                <label class="block text-gray-300">Username</label>
+                <input type="text" name="username" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-300">Password</label>
+                <input type="password" name="password" class="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-white" required>
+            </div>
+            <button type="submit" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg w-full">Register</button>
+        </form>
+        <p class="text-gray-500 mt-4 text-center">Already have an account? <a href="{{ url_for('login') }}" class="text-red-600">Login</a></p>
+    </div>
+</body>
+</html>
