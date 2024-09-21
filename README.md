@@ -1,72 +1,103 @@
 # TaskMasterPro
 
-TaskMasterPro is an AI-powered task management application designed to help you efficiently manage and prioritize your tasks. Utilizing Flask for the backend and Tailwind CSS for the frontend, TaskMasterPro provides a seamless experience for task tracking and management.
+TaskMasterPro is an AI-powered to-do list application that helps users prioritize and manage their tasks efficiently. By utilizing machine learning, TaskMasterPro automatically calculates task priorities based on deadlines and estimated completion time, enabling users to focus on what matters most.
 
 ## Features
 
-- **AI-Powered Prioritization**: Uses machine learning to predict and set task priorities based on deadlines and user input.
-- **Task Tracking**: Add, update, and track tasks with deadlines and estimated completion times.
-- **Priority-Based Color Coding**: Visualize task urgency with color-coded priorities (High, Medium, Low).
-- **Interactive UI**: Built with Tailwind CSS for a modern and responsive user interface.
-- **Mark Tasks as Done**: Easily mark tasks as completed or in progress.
+- **AI-Driven Prioritization**: TaskMasterPro uses a machine learning model to predict the priority of tasks.
+- **Task Categorization**: Tasks are grouped into 'Today', 'Tomorrow', 'Upcoming', and 'Past Due' categories.
+- **User Authentication**: Secure login and registration system.
+- **Task Management**: Add, delete, and mark tasks as done with ease.
+- **Mobile Responsive**: The application is designed to work on all devices, using Tailwind CSS for styling.
+  
+## Directory Structure
 
+```plaintext
+TaskMasterPro/
+├── auth/
+│   └── routes.py               # User authentication routes
+│
+├── tasks/
+│   └── routes.py               # Task management routes (add, update, delete)
+│
+├── templates/
+│   ├── about.html              # About page
+│   ├── index.html              # Main task view page
+│   ├── login.html              # Login page
+│   └── register.html           # Register page
+│
+├── instance/
+│   └── app.db                  # SQLite database
+│
+├── app.py                      # Main Flask application
+├── extensions.py               # Flask extensions (SQLAlchemy, Flask-Login)
+├── models.py                   # SQLAlchemy database models And AI Models (User, Task)
+├── requirements.txt            # Python dependencies
+├── tailwind.config.js          # Tailwind CSS configuration
+└── README.md                   # Project documentation
+```
 ## Installation
+ - Prerequisites
+ - Python 3.x
+ - Node.js and npm (for Tailwind CSS)
+ - Virtual Environment (recommended)
+ 
+ ## Setup
+ 1. Clone the repository:
 
-1. **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/BinaleGit/TaskMasterPro.git
-    ```
-
-2. **Navigate to the project directory:**
-
-    ```bash
+ ```
+ git clone https://github.com/YourUsername/TaskMasterPro.git
     cd TaskMasterPro
-    ```
+```
+2. Set up a virtual environment:
+ ```
+ python -m venv myenv
+source myenv/bin/activate  # Windows: myenv\Scripts\activate
+```
+3. Install Python dependencies:
+```
+pip install -r requirements.txt
+```
+4. Install Node.js dependencies:
+```
+npm install
+```
+5. Initialize the database:
+```
+flask db init
+flask db migrate
+flask db upgrade
+```
+6. Run the application:
+```
+flask run
+```
+The app will be running at http://127.0.0.1:5000/.
 
-3. **Install dependencies:**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. **Run the application:**
-
-    ```bash
-    python app.py
-    ```
-
-5. **Open your browser and navigate to:**
-
-    ```
-    http://127.0.0.1:5000/
-    ```
-
-## Configuration
-
-- **CSV File**: Ensure you have a `tasks.csv` file in the project directory with appropriate columns (e.g., task_name, priority, deadline, estimated_time).
-- **Model Training**: The model is trained on the task data when the application starts. Make sure your dataset is up-to-date.
-
+## Optional: Compile Tailwind CSS
+```
+npm run build-css
+```
 ## Usage
+1. Register: Create an account to start managing tasks.
+2. Login: Access your personalized task list.
+3. Add Tasks: Input the task name, deadline, estimated time, and priority.
+4. AI-Powered Prioritization: TaskMasterPro uses AI to calculate and display the most urgent tasks.
+5. Manage Tasks: Mark tasks as done, update details, or delete tasks as necessary.
+## Technologies Used
+ - Flask: Python web framework for building the backend.
+ - Flask-Login: User authentication.
+ - Flask-SQLAlchemy: ORM for handling SQLite database.
+ - Pandas and Scikit-learn: Data processing and machine learning for task prioritization.
+ - Tailwind CSS: For responsive UI design.
+ - Jinja2: Templating engine for HTML rendering.
 
-- **Add Tasks**: Use the "Add a Task" form to input new tasks with deadlines, priorities, and estimated time.
-- **View Tasks**: Tasks are displayed with priority-based color coding and time left until the deadline.
-- **Manage Tasks**: Mark tasks as done or in progress with the provided buttons.
-
-## Contributing
-
-1. **Fork the repository**.
-2. **Create a new branch** (`git checkout -b feature/YourFeature`).
-3. **Make your changes**.
-4. **Commit your changes** (`git commit -am 'Add new feature'`).
-5. **Push to the branch** (`git push origin feature/YourFeature`).
-6. **Create a new Pull Request**.
+ Created with ❤️ by Roee.
 
 
-## Acknowledgements
 
-- **Flask**: Web framework for Python.
-- **Tailwind CSS**: Utility-first CSS framework.
-- **Pandas**: Data analysis library for Python.
-- **Scikit-learn**: Machine learning library for Python.
-- **Numpy**: Numerical computing library for Python.
+
+
+
+
+
